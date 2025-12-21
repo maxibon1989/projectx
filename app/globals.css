@@ -3,17 +3,108 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 15, 23, 42;
+  --background-rgb: 248, 250, 252;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: rgb(var(--background-rgb));
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focus ring styles */
+*:focus-visible {
+  outline: 2px solid #64748b;
+  outline-offset: 2px;
+}
+
+/* Remove default button styles on iOS */
+button {
+  -webkit-appearance: none;
+}
+
+/* Calendar grid styling */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: #e2e8f0;
+}
+
+.calendar-cell {
+  background-color: white;
+  min-height: 100px;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Priority colors for shopping list */
+.priority-urgent {
+  border-left: 3px solid #ef4444;
+}
+
+.priority-high {
+  border-left: 3px solid #f59e0b;
+}
+
+.priority-normal {
+  border-left: 3px solid #3b82f6;
+}
+
+.priority-low {
+  border-left: 3px solid #94a3b8;
+}
+
+/* Issue status colors */
+.status-open {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.status-planned {
+  background-color: #fefce8;
+  border-color: #fef08a;
+}
+
+.status-in_progress {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.status-fixed {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
 }
