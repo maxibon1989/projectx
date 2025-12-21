@@ -1,22 +1,22 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import './globals.css';
+import type { Metadata } from 'next';
+import { AppProvider } from '@/contexts/AppContext';
 
 export const metadata: Metadata = {
-  title: 'Company Dashboard',
-  description: 'Employee onboarding and operations platform',
-}
+  title: 'Home Planner',
+  description: 'Shared family home coordination and planning',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="font-sans antialiased">
+        <AppProvider>{children}</AppProvider>
+      </body>
     </html>
-  )
+  );
 }
