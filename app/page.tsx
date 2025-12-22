@@ -107,43 +107,36 @@ export default function Dashboard() {
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            value={allStays.length}
-            label="Total Stays"
+            value={upcomingStays.length}
+            label="Upcoming stays"
             icon={<FiCalendar className="w-5 h-5" />}
-            iconBgColor="bg-primary-100"
-            iconColor="text-primary-600"
-            change={12}
-            sparkline={[0.3, 0.5, 0.4, 0.7, 0.6, 0.8, 0.9]}
-            sparklineColor="#0ac5b3"
-          />
-          <StatCard
-            value={state.familyGroup?.members.length || 0}
-            label="Family Members"
-            icon={<FiUsers className="w-5 h-5" />}
             iconBgColor="bg-blue-100"
             iconColor="text-blue-600"
-            sparkline={[0.5, 0.6, 0.5, 0.7, 0.8, 0.7, 0.9]}
-            sparklineColor="#3b82f6"
+            href="/calendar"
           />
           <StatCard
-            value={completedStays}
-            label="Completed Stays"
-            icon={<FiCheckCircle className="w-5 h-5" />}
+            value={boardPosts.length}
+            label="Board posts"
+            icon={<FiMessageSquare className="w-5 h-5" />}
+            iconBgColor="bg-green-100"
+            iconColor="text-green-600"
+            href="/board"
+          />
+          <StatCard
+            value={shoppingItems.length}
+            label="Shopping items"
+            icon={<FiShoppingCart className="w-5 h-5" />}
             iconBgColor="bg-amber-100"
             iconColor="text-amber-600"
-            change={8}
-            sparkline={[0.2, 0.4, 0.3, 0.5, 0.6, 0.7, 0.8]}
-            sparklineColor="#f59e0b"
+            href="/shopping"
           />
           <StatCard
             value={issues.length}
-            label="Open Issues"
+            label="Open issues"
             icon={<FiAlertCircle className="w-5 h-5" />}
             iconBgColor="bg-rose-100"
             iconColor="text-rose-600"
-            change={issues.length > 0 ? -5 : 0}
-            sparkline={[0.8, 0.6, 0.7, 0.5, 0.4, 0.3, 0.2]}
-            sparklineColor="#f43f5e"
+            href="/issues"
           />
         </div>
 
