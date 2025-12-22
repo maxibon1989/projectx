@@ -14,8 +14,8 @@ export function Card({ children, className, onClick, hover = false }: CardProps)
   return (
     <div
       className={cn(
-        'bg-white rounded-xl border border-slate-200 shadow-sm',
-        hover && 'cursor-pointer hover:shadow-md hover:border-slate-300 transition-all',
+        'bg-white rounded-2xl border border-slate-100',
+        hover && 'cursor-pointer card-hover',
         onClick && 'cursor-pointer',
         className
       )}
@@ -33,7 +33,7 @@ interface CardHeaderProps {
 
 export function CardHeader({ children, className }: CardHeaderProps) {
   return (
-    <div className={cn('px-4 py-3 border-b border-slate-100', className)}>
+    <div className={cn('px-5 py-4 border-b border-slate-100', className)}>
       {children}
     </div>
   );
@@ -45,7 +45,7 @@ interface CardBodyProps {
 }
 
 export function CardBody({ children, className }: CardBodyProps) {
-  return <div className={cn('p-4', className)}>{children}</div>;
+  return <div className={cn('p-5', className)}>{children}</div>;
 }
 
 interface CardFooterProps {
@@ -55,7 +55,7 @@ interface CardFooterProps {
 
 export function CardFooter({ children, className }: CardFooterProps) {
   return (
-    <div className={cn('px-4 py-3 border-t border-slate-100', className)}>
+    <div className={cn('px-5 py-4 border-t border-slate-100', className)}>
       {children}
     </div>
   );
