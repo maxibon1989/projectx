@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { FiTrendingUp, FiTrendingDown } from 'react-icons/fi';
+import Link from 'next/link';
 
 interface StatCardProps {
   value: string | number;
@@ -14,6 +15,7 @@ interface StatCardProps {
   changeLabel?: string;
   sparkline?: number[];
   sparklineColor?: string;
+  href?: string;
 }
 
 export function StatCard({
@@ -26,11 +28,15 @@ export function StatCard({
   changeLabel = 'Last month',
   sparkline,
   sparklineColor = '#0ac5b3',
+  href,
 }: StatCardProps) {
   const isPositive = change !== undefined && change >= 0;
 
-  return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-100">
+  const cardContent = (
+    <div className={cn(
+      "bg-white rounded-2xl p-5 border border-slate-100",
+      href && "cursor-pointer hover:border-slate-200 hover:shadow-md transition-all"
+    )}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-3xl font-bold text-slate-800">{value}</p>
@@ -87,4 +93,10 @@ export function StatCard({
       </div>
     </div>
   );
+
+  if (href) {
+    return <Link href={href}>{cardContent}</Link>;
+  }
+
+  return cardContent;
 }
