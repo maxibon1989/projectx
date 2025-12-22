@@ -88,30 +88,34 @@ export default function BoardPage() {
   const canManagePost = (post: BoardPost) => {
     return (
       post.authorId === state.currentUser?.id ||
-      state.currentUser?.role === 'admin'
+      state.currentUser?.role === 'owner' ||
+      state.currentUser?.role === 'cohost'
     );
   };
 
   if (!selectedHouse) {
     return (
-      <PageLayout title="Family Board">
+      <PageLayout>
         <EmptyState
           icon={<FiMessageSquare className="w-8 h-8" />}
-          title="No house selected"
-          description="Select a house from the sidebar to view its board."
+          title="No property selected"
+          description="Select a property from the sidebar to view internal notes."
         />
       </PageLayout>
     );
   }
 
   return (
-    <PageLayout title="Family Board">
+    <PageLayout>
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <p className="text-slate-500">
-            Announcements and notes for {selectedHouse.name}
-          </p>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Internal Notes</h1>
+            <p className="text-slate-500 text-sm mt-1">
+              Notes and reminders for {selectedHouse.name}
+            </p>
+          </div>
           <Button onClick={() => setShowModal(true)}>
             <FiPlus className="w-4 h-4 mr-2" />
             New Post
@@ -122,8 +126,8 @@ export default function BoardPage() {
         {posts.length === 0 ? (
           <EmptyState
             icon={<FiMessageSquare className="w-8 h-8" />}
-            title="No posts yet"
-            description="Share announcements, reminders, or notes with your family."
+            title="No notes yet"
+            description="Share internal notes and reminders with co-hosts."
             actionLabel="Create Post"
             onAction={() => setShowModal(true)}
           />
