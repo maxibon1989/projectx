@@ -57,10 +57,10 @@ export default function SettingsPage() {
     }
   };
 
-  const isAdmin = state.currentUser?.role === 'admin';
+  const isOwnerOrCohost = state.currentUser?.role === 'owner' || state.currentUser?.role === 'cohost';
 
   return (
-    <PageLayout title="Settings">
+    <PageLayout>
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Profile Section */}
         <Card>
@@ -85,17 +85,17 @@ export default function SettingsPage() {
           </CardBody>
         </Card>
 
-        {/* Family Group Section */}
+        {/* Team Section */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <FiUsers className="w-5 h-5 text-slate-400" />
-              <h3 className="font-semibold text-slate-800">Family Group</h3>
+              <h3 className="font-semibold text-slate-800">Team</h3>
             </div>
           </CardHeader>
           <CardBody className="space-y-4">
             <div>
-              <p className="text-sm text-slate-500 mb-1">Group Name</p>
+              <p className="text-sm text-slate-500 mb-1">Property Group</p>
               <p className="font-medium text-slate-800">
                 {state.familyGroup?.name || 'No group'}
               </p>
@@ -122,7 +122,7 @@ export default function SettingsPage() {
                       </div>
                     </div>
                     <Badge
-                      variant={member.role === 'admin' ? 'info' : 'neutral'}
+                      variant={member.role === 'owner' ? 'info' : 'neutral'}
                       size="sm"
                     >
                       {getRoleDisplayName(member.role)}
@@ -132,13 +132,13 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {isAdmin && (
+            {isOwnerOrCohost && (
               <div className="pt-4 border-t border-slate-100">
                 <p className="text-sm font-medium text-slate-700 mb-2">
                   Invite Code
                 </p>
                 <p className="text-xs text-slate-500 mb-2">
-                  Share this code with family members to let them join the group.
+                  Share this code with team members to let them join.
                 </p>
                 <div className="flex items-center gap-2">
                   <Input value={inviteCode} readOnly className="font-mono" />
@@ -155,17 +155,17 @@ export default function SettingsPage() {
           </CardBody>
         </Card>
 
-        {/* Houses Overview */}
+        {/* Properties Overview */}
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <FiHome className="w-5 h-5 text-slate-400" />
-              <h3 className="font-semibold text-slate-800">Houses</h3>
+              <h3 className="font-semibold text-slate-800">Properties</h3>
             </div>
           </CardHeader>
           <CardBody>
             {state.houses.length === 0 ? (
-              <p className="text-sm text-slate-500">No houses added yet.</p>
+              <p className="text-sm text-slate-500">No properties added yet.</p>
             ) : (
               <div className="space-y-2">
                 {state.houses.map((house) => (
@@ -222,10 +222,10 @@ export default function SettingsPage() {
           <CardBody>
             <div className="text-center text-sm text-slate-500">
               <p className="font-medium text-slate-700 mb-1">
-                Family Home Planner
+                RentalOS
               </p>
               <p>
-                A coordination system for families sharing one or multiple homes.
+                A house operating system for rentals and shared properties.
               </p>
               <p className="mt-2 text-xs">
                 Demo version · Data stored locally

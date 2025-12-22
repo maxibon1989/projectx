@@ -80,6 +80,7 @@ export default function ShoppingPage() {
       };
       dispatch({ type: 'UPDATE_SHOPPING_ITEM', payload: updatedItem });
     } else {
+      const isGuestSuggestion = state.currentUser?.role === 'guest';
       const newItem: ShoppingItem = {
         id: generateId(),
         houseId: selectedHouse.id,
@@ -88,6 +89,7 @@ export default function ShoppingPage() {
         priority,
         category,
         addedBy: state.currentUser?.id || '',
+        status: isGuestSuggestion ? 'suggested' : 'standard',
         createdAt: new Date(),
       };
       dispatch({ type: 'ADD_SHOPPING_ITEM', payload: newItem });

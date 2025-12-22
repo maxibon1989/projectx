@@ -87,6 +87,7 @@ export default function HousesPage() {
         .split('\n')
         .map((r) => r.trim())
         .filter(Boolean),
+      rulesVersion: 1,
       rooms: [],
       defaultArrivalChecklist: createDefaultArrivalChecklist(),
       defaultDepartureChecklist: createDefaultDepartureChecklist(),
