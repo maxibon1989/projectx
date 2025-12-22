@@ -8,3 +8,4 @@ export { Modal } from './Modal';
 export { Avatar, AvatarGroup } from './Avatar';
 export { Checkbox } from './Checkbox';
 export { EmptyState } from './EmptyState';
+export { StatCard } from './StatCard';

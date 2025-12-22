@@ -176,7 +176,7 @@ export default function IssuesPage() {
             onClick={() => setFilter('all')}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               filter === 'all'
-                ? 'bg-slate-800 text-white'
+                ? 'bg-primary-500 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
@@ -190,7 +190,7 @@ export default function IssuesPage() {
                 onClick={() => setFilter(s.value)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                   filter === s.value
-                    ? 'bg-slate-800 text-white'
+                    ? 'bg-primary-500 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -366,7 +366,7 @@ export default function IssuesPage() {
             <select
               value={selectedRoom}
               onChange={(e) => setSelectedRoom(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="">General / Not specific</option>
               {selectedHouse?.rooms.map((room) => (
@@ -384,7 +384,7 @@ export default function IssuesPage() {
               <select
                 value={issueStatus}
                 onChange={(e) => setIssueStatus(e.target.value as IssueStatus)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 {statuses.map((s) => (
                   <option key={s.value} value={s.value}>

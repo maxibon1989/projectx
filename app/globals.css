@@ -3,8 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 15, 23, 42;
+  --foreground-rgb: 30, 41, 59;
   --background-rgb: 248, 250, 252;
+  --primary: #0ac5b3;
+  --primary-light: #effefb;
 }
 
 body {
@@ -24,17 +26,17 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #e2e8f0;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #cbd5e1;
 }
 
-/* Focus ring styles */
+/* Focus ring styles - teal accent */
 *:focus-visible {
-  outline: 2px solid #64748b;
+  outline: 2px solid #0ac5b3;
   outline-offset: 2px;
 }
 
@@ -48,7 +50,7 @@ button {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 1px;
-  background-color: #e2e8f0;
+  background-color: #f1f5f9;
 }
 
 .calendar-cell {
@@ -81,7 +83,7 @@ button {
 }
 
 .priority-normal {
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid #0ac5b3;
 }
 
 .priority-low {
@@ -100,11 +102,95 @@ button {
 }
 
 .status-in_progress {
-  background-color: #eff6ff;
-  border-color: #bfdbfe;
+  background-color: #effefb;
+  border-color: #93fceb;
 }
 
 .status-fixed {
   background-color: #f0fdf4;
   border-color: #bbf7d0;
+}
+
+/* Stat card mini chart placeholder */
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 32px;
+}
+
+.mini-chart-bar {
+  width: 4px;
+  background-color: currentColor;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+/* Progress indicator */
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.04);
+  transform: translateY(-1px);
+}
+
+/* Sidebar styles */
+.sidebar-item {
+  @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all;
+}
+
+.sidebar-item-active {
+  @apply bg-primary-500 text-white;
+}
+
+.sidebar-item-inactive {
+  @apply text-slate-600 hover:bg-slate-100;
+}
+
+/* Search input */
+.search-input {
+  @apply w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm;
+  @apply placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500;
+}
+
+/* Button primary teal */
+.btn-primary {
+  @apply inline-flex items-center justify-center px-4 py-2 bg-primary-500 text-white font-medium rounded-xl;
+  @apply hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors;
+}
+
+/* Stat card */
+.stat-card {
+  @apply bg-white rounded-2xl p-5 border border-slate-100;
+}
+
+.stat-value {
+  @apply text-3xl font-bold text-slate-800;
+}
+
+.stat-label {
+  @apply text-sm text-slate-500 mt-1;
+}
+
+.stat-icon {
+  @apply w-10 h-10 rounded-xl flex items-center justify-center;
+}
+
+.stat-change {
+  @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full;
+}
+
+.stat-change-up {
+  @apply bg-green-100 text-green-700;
+}
+
+.stat-change-down {
+  @apply bg-red-100 text-red-700;
 }
