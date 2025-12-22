@@ -293,7 +293,7 @@ export default function CalendarPage() {
                 <div
                   className={`text-sm font-medium mb-1 w-7 h-7 flex items-center justify-center rounded-full ${
                     isToday(day.date)
-                      ? 'bg-slate-800 text-white'
+                      ? 'bg-primary-500 text-white'
                       : day.isCurrentMonth
                       ? 'text-slate-700'
                       : 'text-slate-400'
@@ -429,7 +429,7 @@ export default function CalendarPage() {
                   onClick={() => toggleAttendee(member.id)}
                   className={`flex items-center gap-2 p-2 rounded-lg border transition-colors ${
                     selectedAttendees.includes(member.id)
-                      ? 'border-slate-800 bg-slate-50'
+                      ? 'border-primary-500 bg-primary-50'
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -537,8 +537,8 @@ export default function CalendarPage() {
                   onClick={() => setChecklistType('arrival')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
                     checklistType === 'arrival'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
                   Arrival Checklist
@@ -547,8 +547,8 @@ export default function CalendarPage() {
                   onClick={() => setChecklistType('departure')}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
                     checklistType === 'departure'
-                      ? 'bg-slate-800 text-white'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
                   Departure Checklist

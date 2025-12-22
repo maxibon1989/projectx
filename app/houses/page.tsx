@@ -461,7 +461,7 @@ export default function HousesPage() {
             <select
               value={roomType}
               onChange={(e) => setRoomType(e.target.value as RoomType)}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               {roomTypes.map((type) => (
                 <option key={type.value} value={type.value}>
