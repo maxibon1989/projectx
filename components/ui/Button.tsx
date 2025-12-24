@@ -2,12 +2,14 @@
 
 import { cn } from '@/lib/utils';
 import { ReactNode, ButtonHTMLAttributes } from 'react';
+import Link from 'next/link';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   children: ReactNode;
   fullWidth?: boolean;
+  href?: string;
 }
 
 export function Button({
@@ -17,6 +19,7 @@ export function Button({
   className,
   fullWidth = false,
   disabled,
+  href,
   ...props
 }: ButtonProps) {
   const baseStyles =
@@ -36,15 +39,25 @@ export function Button({
     lg: 'px-6 py-3 text-base',
   };
 
+  const buttonClassName = cn(
+    baseStyles,
+    variants[variant],
+    sizes[size],
+    fullWidth && 'w-full',
+    className
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={buttonClassName}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
     <button
-      className={cn(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        fullWidth && 'w-full',
-        className
-      )}
+      className={buttonClassName}
       disabled={disabled}
       {...props}
     >

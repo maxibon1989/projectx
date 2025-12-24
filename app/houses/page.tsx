@@ -15,7 +15,7 @@ import {
   EmptyState,
 } from '@/components/ui';
 import { House, Room, RoomType } from '@/types';
-import { generateId, createDefaultArrivalChecklist, createDefaultDepartureChecklist } from '@/lib/utils';
+import { generateId, createDefaultArrivalChecklist, createDefaultDepartureChecklist, createDefaultCleaningChecklist } from '@/lib/utils';
 import {
   FiHome,
   FiPlus,
@@ -91,6 +91,7 @@ export default function HousesPage() {
       rooms: [],
       defaultArrivalChecklist: createDefaultArrivalChecklist(),
       defaultDepartureChecklist: createDefaultDepartureChecklist(),
+      defaultCleaningChecklist: createDefaultCleaningChecklist(),
       createdAt: new Date(),
     };
 

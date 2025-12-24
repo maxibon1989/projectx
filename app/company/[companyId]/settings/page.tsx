@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { FiBuilding, FiUsers, FiLock, FiBell, FiDatabase } from 'react-icons/fi';
+import { FiBriefcase, FiUsers, FiLock, FiBell, FiDatabase } from 'react-icons/fi';
 import { PageLayout } from '@/components/layout';
 import { Card, Button, Input, Select, Badge } from '@/components/ui';
 
@@ -23,7 +23,7 @@ export default function SettingsPage() {
         <Card>
           <div className="p-6">
             <h3 className="font-semibold mb-4 flex items-center gap-2">
-              <FiBuilding className="w-5 h-5" />
+              <FiBriefcase className="w-5 h-5" />
               Company Profile
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

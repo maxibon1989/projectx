@@ -7,12 +7,15 @@ import Link from 'next/link';
 
 interface StatCardProps {
   value: string | number;
-  label: string;
+  label?: string;
+  title?: string; // Alias for label
+  description?: string;
   icon: ReactNode;
   iconBgColor?: string;
   iconColor?: string;
   change?: number;
   changeLabel?: string;
+  trend?: { value: number; isPositive: boolean }; // Alternative to change
   sparkline?: number[];
   sparklineColor?: string;
   href?: string;
@@ -21,16 +24,23 @@ interface StatCardProps {
 export function StatCard({
   value,
   label,
+  title,
+  description,
   icon,
   iconBgColor = 'bg-primary-100',
   iconColor = 'text-primary-600',
   change,
   changeLabel = 'Last month',
+  trend,
   sparkline,
   sparklineColor = '#0ac5b3',
   href,
 }: StatCardProps) {
-  const isPositive = change !== undefined && change >= 0;
+  // Use title as alias for label
+  const displayLabel = label || title || '';
+  // Support both change and trend props
+  const trendValue = change ?? trend?.value;
+  const isPositive = trend ? trend.isPositive : (change !== undefined && change >= 0);
 
   const cardContent = (
     <div className={cn(
@@ -40,9 +50,10 @@ export function StatCard({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-3xl font-bold text-slate-800">{value}</p>
-          <p className="text-sm text-slate-500 mt-1">{label}</p>
+          <p className="text-sm text-slate-500 mt-1">{displayLabel}</p>
+          {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
 
-          {change !== undefined && (
+          {trendValue !== undefined && (
             <div className="flex items-center gap-2 mt-3">
               <span
                 className={cn(
@@ -55,7 +66,7 @@ export function StatCard({
                 ) : (
                   <FiTrendingDown className="w-3 h-3" />
                 )}
-                {Math.abs(change)}%
+                {Math.abs(trendValue)}%
               </span>
               <span className="text-xs text-slate-400">{changeLabel}</span>
             </div>
