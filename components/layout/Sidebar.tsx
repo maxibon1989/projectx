@@ -1,169 +1,148 @@
 'use client';
 
-import { cn, getRoleDisplayName } from '@/lib/utils';
-import { useApp } from '@/contexts/AppContext';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 import {
   FiHome,
-  FiCalendar,
   FiClipboard,
-  FiShoppingCart,
-  FiAlertCircle,
-  FiSettings,
-  FiChevronDown,
-  FiChevronLeft,
-  FiShield,
-  FiBookOpen,
-  FiCheckSquare,
+  FiLayers,
+  FiAward,
   FiUsers,
-  FiInfo,
+  FiCheckSquare,
+  FiMessageCircle,
+  FiFileText,
+  FiActivity,
+  FiLink,
+  FiSettings,
+  FiCreditCard,
+  FiShield,
+  FiSliders,
+  FiChevronLeft,
+  FiChevronDown,
 } from 'react-icons/fi';
-import { UserRole } from '@/types';
+import { CompanyRole } from '@/types';
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
-  roles: UserRole[]; // Which roles can see this item
+  roles?: CompanyRole[];
   badge?: number;
 }
-
-// Navigation items with role-based visibility
-const getNavItems = (
-  requestedStaysCount: number,
-  openIssuesCount: number,
-  pendingCleaningCount: number
-): NavItem[] => [
-  // Owner and Co-host navigation
-  {
-    label: 'Dashboard',
-    href: '/',
-    icon: <FiHome className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-  },
-  {
-    label: 'Calendar',
-    href: '/calendar',
-    icon: <FiCalendar className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-  },
-  {
-    label: 'Stays',
-    href: '/stays',
-    icon: <FiClipboard className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-    badge: requestedStaysCount > 0 ? requestedStaysCount : undefined,
-  },
-  {
-    label: 'Issues',
-    href: '/issues',
-    icon: <FiAlertCircle className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-    badge: openIssuesCount > 0 ? openIssuesCount : undefined,
-  },
-  {
-    label: 'Shopping',
-    href: '/shopping',
-    icon: <FiShoppingCart className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-  },
-  {
-    label: 'Cleaning',
-    href: '/cleaning',
-    icon: <FiCheckSquare className="w-5 h-5" />,
-    roles: ['owner', 'cohost'],
-    badge: pendingCleaningCount > 0 ? pendingCleaningCount : undefined,
-  },
-  {
-    label: 'House Setup',
-    href: '/houses',
-    icon: <FiSettings className="w-5 h-5" />,
-    roles: ['owner'],
-  },
-
-  // Guest navigation
-  {
-    label: 'My Stay',
-    href: '/',
-    icon: <FiHome className="w-5 h-5" />,
-    roles: ['guest'],
-  },
-  {
-    label: 'Checklist',
-    href: '/checklist',
-    icon: <FiCheckSquare className="w-5 h-5" />,
-    roles: ['guest'],
-  },
-  {
-    label: 'House Info',
-    href: '/house-info',
-    icon: <FiInfo className="w-5 h-5" />,
-    roles: ['guest'],
-  },
-  {
-    label: 'Report Issue',
-    href: '/report-issue',
-    icon: <FiAlertCircle className="w-5 h-5" />,
-    roles: ['guest'],
-  },
-
-  // Cleaner navigation
-  {
-    label: 'Cleaning Tasks',
-    href: '/cleaning',
-    icon: <FiCheckSquare className="w-5 h-5" />,
-    roles: ['cleaner'],
-    badge: pendingCleaningCount > 0 ? pendingCleaningCount : undefined,
-  },
-];
-
-// Safety item - always visible for all roles
-const safetyItem: NavItem = {
-  label: 'Safety Info',
-  href: '/safety',
-  icon: <FiShield className="w-5 h-5" />,
-  roles: ['owner', 'cohost', 'guest', 'cleaner'],
-};
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  variant?: 'company' | 'employee';
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, onClose, variant = 'company' }: SidebarProps) {
   const pathname = usePathname();
-  const {
-    state,
-    dispatch,
-    getHouseById,
-    getRequestedStays,
-    getOpenIssuesForHouse,
-    getPendingCleaningTasks,
-    isOwner,
-    isGuest,
-    isCleaner,
-  } = useApp();
+  const params = useParams();
+  const companyId = (params.companyId as string) || 'demo';
+  const employeeId = (params.employeeId as string) || 'me';
 
-  const userRole = state.currentUser?.role;
+  // Company Workspace navigation
+  const companyNavItems: NavItem[] = [
+    {
+      label: 'Home',
+      href: `/company/${companyId}/home`,
+      icon: <FiHome className="w-5 h-5" />,
+    },
+    {
+      label: 'Audit',
+      href: `/company/${companyId}/audit`,
+      icon: <FiClipboard className="w-5 h-5" />,
+    },
+    {
+      label: 'Plan',
+      href: `/company/${companyId}/plan`,
+      icon: <FiLayers className="w-5 h-5" />,
+    },
+    {
+      label: 'Certificate',
+      href: `/company/${companyId}/certificate`,
+      icon: <FiAward className="w-5 h-5" />,
+    },
+    {
+      label: 'Employees',
+      href: `/company/${companyId}/employees`,
+      icon: <FiUsers className="w-5 h-5" />,
+    },
+    {
+      label: 'Operations',
+      href: '/ops/tasks',
+      icon: <FiCheckSquare className="w-5 h-5" />,
+      badge: 2,
+    },
+    {
+      label: 'Support',
+      href: '/support/tickets',
+      icon: <FiMessageCircle className="w-5 h-5" />,
+      badge: 1,
+    },
+    {
+      label: 'Documents',
+      href: '/docs',
+      icon: <FiFileText className="w-5 h-5" />,
+    },
+  ];
 
-  // Get counts for badges
-  const selectedHouseId = state.selectedHouseId;
-  const requestedStaysCount = selectedHouseId ? getRequestedStays(selectedHouseId).length : 0;
-  const openIssuesCount = selectedHouseId ? getOpenIssuesForHouse(selectedHouseId).length : 0;
-  const pendingCleaningCount = getPendingCleaningTasks().length;
+  const companySecondaryItems: NavItem[] = [
+    {
+      label: 'Monitoring',
+      href: `/company/${companyId}/monitoring`,
+      icon: <FiActivity className="w-5 h-5" />,
+    },
+    {
+      label: 'Integrations',
+      href: `/company/${companyId}/integrations`,
+      icon: <FiLink className="w-5 h-5" />,
+    },
+    {
+      label: 'Settings',
+      href: `/company/${companyId}/settings`,
+      icon: <FiSettings className="w-5 h-5" />,
+    },
+    {
+      label: 'Billing',
+      href: `/company/${companyId}/billing`,
+      icon: <FiCreditCard className="w-5 h-5" />,
+    },
+  ];
 
-  // Filter nav items based on user role
-  const navItems = getNavItems(requestedStaysCount, openIssuesCount, pendingCleaningCount).filter(
-    (item) => userRole && item.roles.includes(userRole)
-  );
+  // Employee Wallet navigation
+  const employeeNavItems: NavItem[] = [
+    {
+      label: 'My Security',
+      href: `/employee/${employeeId}/security`,
+      icon: <FiShield className="w-5 h-5" />,
+    },
+    {
+      label: 'My Choices',
+      href: `/employee/${employeeId}/choices`,
+      icon: <FiSliders className="w-5 h-5" />,
+    },
+    {
+      label: 'Support',
+      href: '/support/tickets',
+      icon: <FiMessageCircle className="w-5 h-5" />,
+    },
+    {
+      label: 'Documents',
+      href: '/docs',
+      icon: <FiFileText className="w-5 h-5" />,
+    },
+  ];
 
-  const handleHouseChange = (houseId: string) => {
-    dispatch({ type: 'SET_SELECTED_HOUSE', payload: houseId });
+  const navItems = variant === 'employee' ? employeeNavItems : companyNavItems;
+  const secondaryItems = variant === 'employee' ? [] : companySecondaryItems;
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === href;
+    return pathname.startsWith(href);
   };
-
-  // Show house selector only for owner/cohost
-  const showHouseSelector = isOwner() || state.currentUser?.role === 'cohost';
 
   return (
     <>
@@ -178,192 +157,131 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 h-full w-64 bg-white z-50 transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col',
+          'fixed left-0 top-0 h-full w-64 bg-white z-50 transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col shadow-lg',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         {/* Logo Header */}
         <div className="px-5 py-4 flex items-center justify-between border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
-              <FiHome className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">U</span>
             </div>
-            <span className="text-lg font-bold text-slate-800">RentalOS</span>
+            <span className="text-lg font-bold text-slate-800">Unbound</span>
           </div>
           <button
             onClick={onClose}
-            className="lg:flex hidden w-7 h-7 rounded-lg bg-slate-100 items-center justify-center text-slate-500 hover:bg-slate-200"
+            className="lg:hidden w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
           >
             <FiChevronLeft className="w-4 h-4" />
           </button>
         </div>
 
-        {/* House Selector - Only for owner/cohost */}
-        {showHouseSelector && (
-          <div className="px-4 py-3">
-            <div className="relative">
-              <select
-                value={state.selectedHouseId || ''}
-                onChange={(e) => handleHouseChange(e.target.value)}
-                className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-              >
-                {state.houses.map((house) => (
-                  <option key={house.id} value={house.id}>
-                    {house.name}
-                  </option>
-                ))}
-              </select>
-              <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-            </div>
+        {/* Workspace Selector */}
+        <div className="px-4 py-3">
+          <div className="relative">
+            <select
+              value={variant}
+              onChange={() => {}}
+              className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 pr-8 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            >
+              <option value="company">Company Workspace</option>
+              <option value="employee">Employee Wallet</option>
+            </select>
+            <FiChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           </div>
-        )}
-
-        {/* Guest/Cleaner Property Info */}
-        {(isGuest() || isCleaner()) && state.selectedHouseId && (
-          <div className="px-4 py-3">
-            <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5">
-              <p className="text-sm font-medium text-slate-700">
-                {getHouseById(state.selectedHouseId)?.name}
-              </p>
-              <p className="text-xs text-slate-500 mt-0.5">
-                {getHouseById(state.selectedHouseId)?.address?.split(',')[0]}
-              </p>
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* Main Navigation */}
         <nav className="flex-1 px-3 py-2 overflow-y-auto">
           <ul className="space-y-1">
-            {navItems.map((item) => {
-              const isActive =
-                pathname === item.href ||
-                (item.href !== '/' && pathname.startsWith(item.href));
-
-              return (
-                <li key={item.href + item.label}>
-                  <Link
-                    href={item.href}
-                    onClick={() => onClose()}
-                    className={cn(
-                      'flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                      isActive
-                        ? 'bg-primary-500 text-white shadow-sm'
-                        : 'text-slate-600 hover:bg-slate-100'
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      {item.label}
-                    </div>
-                    {item.badge && (
-                      <span
-                        className={cn(
-                          'px-2 py-0.5 text-xs font-semibold rounded-full',
-                          isActive
-                            ? 'bg-white/20 text-white'
-                            : 'bg-rose-100 text-rose-600'
-                        )}
-                      >
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* Divider */}
-          <div className="my-4 border-t border-slate-100" />
-
-          {/* Safety - Always visible */}
-          <ul className="space-y-1">
-            <li>
-              <Link
-                href={safetyItem.href}
-                onClick={() => onClose()}
-                className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                  pathname === safetyItem.href
-                    ? 'bg-primary-500 text-white'
-                    : 'text-slate-600 hover:bg-slate-100'
-                )}
-              >
-                {safetyItem.icon}
-                {safetyItem.label}
-              </Link>
-            </li>
-            {/* Settings - Owner/Co-host only */}
-            {(isOwner() || state.currentUser?.role === 'cohost') && (
-              <li>
+            {navItems.map((item) => (
+              <li key={item.href + item.label}>
                 <Link
-                  href="/settings"
+                  href={item.href}
                   onClick={() => onClose()}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                    pathname === '/settings'
-                      ? 'bg-primary-500 text-white'
+                    'flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
+                    isActive(item.href)
+                      ? 'bg-primary text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-100'
                   )}
                 >
-                  <FiUsers className="w-5 h-5" />
-                  Team
+                  <div className="flex items-center gap-3">
+                    {item.icon}
+                    {item.label}
+                  </div>
+                  {item.badge && (
+                    <span
+                      className={cn(
+                        'px-2 py-0.5 text-xs font-semibold rounded-full',
+                        isActive(item.href)
+                          ? 'bg-white/20 text-white'
+                          : 'bg-rose-100 text-rose-600'
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
               </li>
-            )}
+            ))}
           </ul>
+
+          {/* Secondary Navigation */}
+          {secondaryItems.length > 0 && (
+            <>
+              <div className="my-4 border-t border-slate-100" />
+              <ul className="space-y-1">
+                {secondaryItems.map((item) => (
+                  <li key={item.href + item.label}>
+                    <Link
+                      href={item.href}
+                      onClick={() => onClose()}
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
+                        isActive(item.href)
+                          ? 'bg-primary text-white'
+                          : 'text-slate-600 hover:bg-slate-100'
+                      )}
+                    >
+                      {item.icon}
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </nav>
 
-        {/* Property Info Card - Owner only */}
-        {isOwner() && (
+        {/* Company Info */}
+        {variant === 'company' && (
           <div className="px-4 pb-4">
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <h4 className="font-semibold text-slate-800 text-sm">
-                {state.familyGroup?.name || 'Property Group'}
-              </h4>
-              <p className="text-xs text-slate-500 mt-1">
-                {state.familyGroup?.members.length || 0} members · {state.houses.length} properties
-              </p>
+              <h4 className="font-semibold text-slate-800 text-sm">Acme AB</h4>
+              <p className="text-xs text-slate-500 mt-1">52 employees</p>
               <div className="flex gap-2 mt-3">
-                <Link
-                  href="/settings"
-                  className="flex-1 text-center px-3 py-2 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50"
-                >
-                  Manage Team
-                </Link>
-                <Link
-                  href="/houses"
-                  className="flex-1 text-center px-3 py-2 text-xs font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600"
-                >
-                  Add Property
-                </Link>
+                <span className="flex-1 text-center px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg">
+                  Plan Drafted
+                </span>
               </div>
             </div>
           </div>
         )}
 
         {/* User Profile */}
-        {state.currentUser && (
-          <div className="px-4 py-3 border-t border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-sm font-semibold">
-                {state.currentUser.name
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-800 truncate">
-                  {state.currentUser.name}
-                </p>
-                <p className="text-xs text-slate-500">
-                  {getRoleDisplayName(state.currentUser.role)}
-                </p>
-              </div>
+        <div className="px-4 py-3 border-t border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+              AJ
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-slate-800 truncate">Anna Johansson</p>
+              <p className="text-xs text-slate-500">CEO</p>
             </div>
           </div>
-        )}
+        </div>
       </aside>
     </>
   );
