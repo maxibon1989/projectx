@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { FiBuilding, FiUsers, FiDatabase, FiCheck } from 'react-icons/fi';
+import { FiBriefcase, FiUsers, FiDatabase, FiCheck } from 'react-icons/fi';
 import { PageLayout } from '@/components/layout';
 import { Card, Button, Input, Select } from '@/components/ui';
 import { RelatedChips } from '@/components/layout/RelatedChips';
@@ -11,7 +11,7 @@ import { RelatedChips } from '@/components/layout/RelatedChips';
 type OnboardingStep = 'profile' | 'stakeholders' | 'data_sources' | 'complete';
 
 const steps: { key: OnboardingStep; label: string; icon: React.ReactNode }[] = [
-  { key: 'profile', label: 'Company Profile', icon: <FiBuilding /> },
+  { key: 'profile', label: 'Company Profile', icon: <FiBriefcase /> },
   { key: 'stakeholders', label: 'Stakeholders', icon: <FiUsers /> },
   { key: 'data_sources', label: 'Data Sources', icon: <FiDatabase /> },
   { key: 'complete', label: 'Complete', icon: <FiCheck /> },

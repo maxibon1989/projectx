@@ -712,6 +712,7 @@ export interface Invoice {
 // NOTIFICATIONS
 // =============================================================================
 
+// Company/Unbound notification types
 export type NotificationType =
   | 'audit_complete'
   | 'plan_ready'
@@ -723,18 +724,313 @@ export type NotificationType =
   | 'ticket_response'
   | 'drift_alert'
   | 'renewal_reminder'
-  | 'contribution_received';
+  | 'contribution_received'
+  // Rental system notification types
+  | 'stay_requested'
+  | 'stay_confirmed'
+  | 'stay_reminder'
+  | 'checklist_activated'
+  | 'safety_issue'
+  | 'new_issue'
+  | 'supply_suggestion'
+  | 'cleaning_required';
 
+// Note: Notification interface is defined in the Rental House types section below
+
+// =============================================================================
+// RENTAL HOUSE OPERATING SYSTEM TYPES (Legacy)
+// =============================================================================
+
+// User roles for rental system
+export type UserRole = 'owner' | 'cohost' | 'guest' | 'cleaner';
+
+// Permissions for rental system
+export type Permission =
+  | 'manage_house'
+  | 'manage_stays'
+  | 'confirm_stays'
+  | 'manage_members'
+  | 'complete_checklists'
+  | 'report_issues'
+  | 'close_issues'
+  | 'view_notes'
+  | 'edit_notes'
+  | 'manage_shopping'
+  | 'suggest_shopping'
+  | 'view_cleaning'
+  | 'manage_cleaning';
+
+// Role permissions mapping for rental system
+export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  owner: [
+    'manage_house', 'manage_stays', 'confirm_stays', 'manage_members',
+    'complete_checklists', 'report_issues', 'close_issues',
+    'view_notes', 'edit_notes', 'manage_shopping', 'view_cleaning', 'manage_cleaning',
+  ],
+  cohost: [
+    'manage_stays', 'confirm_stays', 'complete_checklists',
+    'report_issues', 'close_issues', 'view_notes', 'edit_notes',
+    'manage_shopping', 'view_cleaning', 'manage_cleaning',
+  ],
+  guest: [
+    'complete_checklists', 'report_issues', 'suggest_shopping',
+  ],
+  cleaner: [
+    'complete_checklists', 'report_issues', 'view_cleaning', 'manage_cleaning',
+  ],
+};
+
+// Member in the rental system
+export interface Member {
+  id: string;
+  name: string;
+  email?: string;
+  role: UserRole;
+  phone?: string;
+  createdAt: Date;
+}
+
+// Property/Family Group
+export interface PropertyGroup {
+  id: string;
+  name: string;
+  members: Member[];
+  houses: string[];
+  createdAt: Date;
+  inviteCode?: string;
+}
+
+export type FamilyGroup = PropertyGroup;
+
+// Room types
+export type RoomType = 'bedroom' | 'guest_room' | 'living_room' | 'storage' | 'bathroom' | 'kitchen' | 'office' | 'other';
+
+// Room in a house
+export interface Room {
+  id: string;
+  houseId: string;
+  name: string;
+  type: RoomType;
+  capacity: number;
+  notes?: string;
+}
+
+// Emergency contact
+export interface EmergencyContact {
+  id: string;
+  name: string;
+  phone: string;
+  type: 'emergency' | 'owner' | 'neighbor' | 'other';
+}
+
+// Safety info for a house
+export interface SafetyInfo {
+  emergencyContacts: EmergencyContact[];
+  fireExtinguisherLocation: string;
+  waterShutoff: string;
+  electricMainSwitch: string;
+  gasShutoff?: string;
+  additionalInfo?: string;
+}
+
+// Checklist item
+export interface ChecklistItem {
+  id: string;
+  text: string;
+  checked: boolean;
+  checkedBy?: string;
+  checkedAt?: Date;
+}
+
+// Rules history entry
+export interface RulesHistoryEntry {
+  id: string;
+  version: number;
+  rules: string[];
+  createdAt: Date;
+  createdBy: string;
+}
+
+// House/Property
+export interface House {
+  id: string;
+  familyGroupId: string;
+  name: string;
+  address?: string;
+  nickname?: string;
+  photos: string[];
+  rules: string[];
+  rulesVersion: number;
+  rulesHistory?: RulesHistoryEntry[];
+  rooms: Room[];
+  defaultArrivalChecklist: ChecklistItem[];
+  defaultDepartureChecklist: ChecklistItem[];
+  defaultCleaningChecklist: ChecklistItem[];
+  safetyInfo?: SafetyInfo;
+  createdAt: Date;
+}
+
+// Stay status
+export type StayStatus = 'requested' | 'planned' | 'confirmed' | 'active' | 'completed' | 'cancelled';
+
+// Room assignment
+export interface RoomAssignment {
+  roomId: string;
+  memberIds: string[];
+  notes?: string;
+}
+
+// Rules acknowledgment
+export interface RulesAcknowledgment {
+  memberId: string;
+  rulesVersion: number;
+  acknowledgedAt: Date;
+}
+
+// Stay summary after completion
+export interface StaySummary {
+  completedArrivalTasks: number;
+  totalArrivalTasks: number;
+  completedDepartureTasks: number;
+  totalDepartureTasks: number;
+  issuesReported: string[];
+  notes: string;
+  generatedAt: Date;
+}
+
+// Stay at a property
+export interface Stay {
+  id: string;
+  houseId: string;
+  startDate: Date;
+  endDate: Date;
+  attendees: string[];
+  guestEmail?: string;
+  roomAssignments: RoomAssignment[];
+  arrivalNotes?: string;
+  arrivalChecklist: ChecklistItem[];
+  departureChecklist: ChecklistItem[];
+  arrivalChecklistActive: boolean;
+  departureChecklistActive: boolean;
+  status: StayStatus;
+  rulesAcknowledgments: RulesAcknowledgment[];
+  createdBy: string;
+  createdAt: Date;
+  confirmedBy?: string;
+  confirmedAt?: Date;
+  summary?: StaySummary;
+  color?: string;
+}
+
+// Cleaning task status
+export type CleaningTaskStatus = 'pending' | 'in_progress' | 'completed';
+
+// Cleaning task
+export interface CleaningTask {
+  id: string;
+  houseId: string;
+  stayId?: string;
+  assignedTo?: string;
+  checklist: ChecklistItem[];
+  status: CleaningTaskStatus;
+  issuesFound: string[];
+  createdAt: Date;
+  completedAt?: Date;
+  notes?: string;
+}
+
+// Board post for internal notes
+export interface BoardPost {
+  id: string;
+  houseId: string;
+  authorId: string;
+  content: string;
+  isPinned: boolean;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
+// Shopping item priority
+export type ItemPriority = 'urgent' | 'high' | 'normal' | 'low';
+
+// Shopping item category
+export type ItemCategory = 'toiletries' | 'cleaning' | 'food' | 'maintenance' | 'other';
+
+// Shopping item status
+export type ItemStatus = 'standard' | 'suggested' | 'approved' | 'rejected' | 'bought';
+
+// Shopping item
+export interface ShoppingItem {
+  id: string;
+  houseId: string;
+  name: string;
+  quantity: number;
+  priority: ItemPriority;
+  category: ItemCategory;
+  addedBy: string;
+  status: ItemStatus;
+  isLowStock?: boolean;
+  assignedTo?: string;
+  createdAt: Date;
+  boughtBy?: string;
+  boughtAt?: Date;
+}
+
+// Issue type
+export type IssueType = 'maintenance' | 'damage' | 'safety';
+
+// Issue severity
+export type IssueSeverity = 'low' | 'medium' | 'high' | 'critical';
+
+// Issue status
+export type IssueStatus = 'open' | 'planned' | 'in_progress' | 'fixed';
+
+// Issue
+export interface Issue {
+  id: string;
+  houseId: string;
+  stayId?: string;
+  roomId?: string;
+  title: string;
+  description: string;
+  type: IssueType;
+  severity: IssueSeverity;
+  photos: string[];
+  status: IssueStatus;
+  reportedBy: string;
+  assignedTo?: string;
+  createdAt: Date;
+  resolvedAt?: Date;
+  resolvedBy?: string;
+}
+
+// Unified Notification interface (supports both systems)
 export interface Notification {
   id: string;
   type: NotificationType;
   title: string;
   message: string;
-  recipientUserId: string;
+  houseId?: string;
+  stayId?: string;
+  issueId?: string;
+  recipientRole?: UserRole;
+  recipientUserId?: string;
   companyId?: string;
   read: boolean;
   actionUrl?: string;
   createdAt: Date;
+}
+
+// Guest onboarding state
+export interface GuestOnboarding {
+  id: string;
+  stayId: string;
+  step: 'welcome' | 'rules' | 'rooms' | 'safety' | 'checklist' | 'complete';
+  rulesAcknowledged: boolean;
+  safetyInfoViewed: boolean;
+  checklistStarted: boolean;
+  createdAt: Date;
+  completedAt?: Date;
 }
 
 // =============================================================================
@@ -774,10 +1070,10 @@ export interface AppState {
 }
 
 // =============================================================================
-// PERMISSIONS
+// COMPANY PERMISSIONS (Unbound Platform)
 // =============================================================================
 
-export type Permission =
+export type CompanyPermission =
   // Company management
   | 'manage_company'
   | 'view_company'
@@ -823,7 +1119,7 @@ export type Permission =
   | 'manage_billing'
   | 'manage_integrations';
 
-export const ROLE_PERMISSIONS: Record<CompanyRole, Permission[]> = {
+export const COMPANY_ROLE_PERMISSIONS: Record<CompanyRole, CompanyPermission[]> = {
   ceo: [
     'manage_company', 'view_company', 'invite_stakeholders',
     'create_audit', 'edit_audit', 'view_audit', 'share_audit',
